@@ -24,7 +24,8 @@ namespace APICatalogo.Models
 
         public int CategoriaId { get; set; }
 
-        [JsonIgnore] // o Json ignore faz com que na chamada do controller de produtos não venha a chave estrangeira também
+        [JsonIgnore] 
+        // o Json ignore faz com que na chamada do controller de produtos não venha a chave estrangeira também
         public Categoria? Categoria { get; set; }
     }
 }
