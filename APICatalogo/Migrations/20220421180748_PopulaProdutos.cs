@@ -8,12 +8,20 @@ namespace APICatalogo.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("Insert into Produtos(Nome,Descricao,Preco,ImageUrl,Estoque,DataCadastro,CategoriaId) " +
+                "Values('Coca-Cola Diet','Refrigerante de Cola 350 ml',5.45,'bebidas.jpg',50,now(),1)");
+            
+            migrationBuilder.Sql("Insert into Produtos(Nome,Descricao,Preco,ImageUrl,Estoque,DataCadastro,CategoriaId) " +
+               "Values('Lanche de Atum','Lanche de Atum com maionese',8.45,'atum.jpg',10,now(),2)");
+            
+            migrationBuilder.Sql("Insert into Produtos(Nome,Descricao,Preco,ImageUrl,Estoque,DataCadastro,CategoriaId) " +
+               "Values('Pudim 100 g','Pudim de leite condensado 100g',6.45,'pudim.jpg',20,now(),3)");
 
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.Sql("Delete from Produtos");
         }
     }
 }
