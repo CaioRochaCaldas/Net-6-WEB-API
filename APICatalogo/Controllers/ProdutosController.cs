@@ -30,7 +30,7 @@ namespace APICatalogo.Controllers
 
         }
 
-        //produto por id
+        //Uma Produto por id qualquer ou uma que acabou de ser criado
         [HttpGet("{id}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
