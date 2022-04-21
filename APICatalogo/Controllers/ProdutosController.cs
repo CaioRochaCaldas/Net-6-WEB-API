@@ -1,5 +1,6 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
+using APICatalogo.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,17 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitofWork _uow;
 
-        public ProdutosController(AppDbContext context)
+        public ProdutosController(IUnitofWork context)
         {
-            _context = context;
+            _uow = context;
+        }
+        //produtos por preço
+        [HttpGet("menorpreco")]
+        public ActionResult<IEnumerable<Produto>> GetProdutosPrecos()
+        {
+            return _uow.ProdutoRepository.GetProdutosPorPreco().ToList();
         }
 
         //Coleção de lista de produto abaixo.
@@ -21,7 +28,7 @@ namespace APICatalogo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {
-            var produtos = _context.Produtos.ToList();
+            var produtos = _uow.ProdutoRepository.Get().ToList();
             if(produtos is null)
             {
                 return NotFound();
@@ -34,7 +41,7 @@ namespace APICatalogo.Controllers
         [HttpGet("{id}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
+            var produto = _uow.ProdutoRepository.GetById(p=>p.ProdutoId ==id);
             if(produto == null)
             {
                 return NotFound("Produto não encontrado");
@@ -47,8 +54,8 @@ namespace APICatalogo.Controllers
         [HttpPost]
         public ActionResult Post(Produto produto)
         {
-            _context.Produtos.Add(produto);//Add produto na memoria
-            _context.SaveChanges(); // salva produtos e persiste eles
+            _uow.ProdutoRepository.Add(produto);//Add produto na memoria
+            _uow.Commit(); // salva produtos e persiste eles
 
             //o produto que foi criado tem um id imcrementado e para achar
             //esse produto recem criado devemos fazer a instancia para o
@@ -71,8 +78,8 @@ namespace APICatalogo.Controllers
                 return BadRequest("Informe um produto que exista");
             }
 
-            _context.Entry(produto).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            _uow.ProdutoRepository.Update(produto);
+            _uow.Commit();
 
             //retorna o objeto produto que foi alterado status code 200 + o produto
             return Ok(produto);
@@ -84,16 +91,16 @@ namespace APICatalogo.Controllers
         
         public ActionResult Delete(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(p=>p.ProdutoId == id);//procura direto no banco
-            //var produto = _context.Produtos.Find(id);   //procura na memoria e depois para o banco
+            var produto = _uow.ProdutoRepository.GetById(p=>p.ProdutoId == id);//procura direto no banco
+            //var produto = _uow.Produtos.Find(id);   //procura na memoria e depois para o banco
 
             if (produto is null)
             {
                 return NotFound("Produto não encontrado");
             }
 
-            _context.Produtos.Remove(produto);
-            _context.SaveChanges();
+            _uow.ProdutoRepository.Delete(produto);
+            _uow.Commit();
 
             //retorna um produto excluido bem sucedidamente status code 200 + o proprio produto
             return Ok(produto);
