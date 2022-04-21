@@ -1,9 +1,18 @@
-﻿namespace APICatalogo.Models
+﻿using System.Collections.ObjectModel;
+
+namespace APICatalogo.Models
 {
     public class Categoria
     {
+        public Categoria() //inicialização da chave estrageira um para muitos
+        {
+            Produtos = new Collection<Produto>();
+        }
+
         public int CategoriaId { get; set; }
         public string? Nome { get; set; }
         public string? ImageUrl { get; set; }
+
+        public ICollection<Produto>? Produtos { get; set; } //uma categoria pode ter um ou mais produtos
     }
 }
