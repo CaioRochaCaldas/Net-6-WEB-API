@@ -109,9 +109,5 @@ namespace APICatalogo.Controllers
 
         }
 
-
-        
-
-
     }
 }

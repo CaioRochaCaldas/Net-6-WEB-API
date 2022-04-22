@@ -1,6 +1,8 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.DTOs;
 using APICatalogo.Models;
 using APICatalogo.Repository;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,31 +14,36 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitofWork _uow;
+        private readonly IMapper _mapper;
 
-        public CategoriasController(IUnitofWork context)
+        public CategoriasController(IUnitofWork context,IMapper mapper)
         {
             _uow = context;
+            _mapper = mapper;
         }
-        //Metodo especifico de categorias, pega todas as categorias + produtos(Include)
-        //vai ter uma toda expecifica
+       
 
         [HttpGet("produtos")]
-        public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
+        public ActionResult<IEnumerable<CategoriaDTO>> GetCategoriasProdutos()
         {
-            // return _uow.CategoriaRepository.Include(p=>p.Produtos).ToList();
-            return _uow.CategoriaRepository.GetCategoriasProdutos().ToList();
+            var categorias = _uow.CategoriaRepository.GetCategoriasProdutos().ToList();
+            var categoriasDto = _mapper.Map<List<CategoriaDTO>>(categorias);
+            return categoriasDto;
+
         }
         //
         //Todas as Categorias
         [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> Get()
+        public ActionResult<IEnumerable<CategoriaDTO>> Get()
         {
-            return _uow.CategoriaRepository.Get().ToList();
+            var categorias = _uow.CategoriaRepository.Get().ToList();
+            var categoriasDto = _mapper.Map<List<CategoriaDTO>>(categorias);
+            return categoriasDto;
         }
 
         //Uma Categoria por id qualquer ou uma que acabou de ser criada
         [HttpGet("{id}",Name ="ObterCategoria")]
-        public ActionResult<Categoria> Get(int id)
+        public ActionResult<CategoriaDTO> Get(int id)
         {
             var categoria = _uow.CategoriaRepository.GetById(p=>p.CategoriaId == id);
 
@@ -44,29 +51,32 @@ namespace APICatalogo.Controllers
             {
                 return NotFound("Categoria não encontrada");
             }
-            return Ok(categoria);
+            var categoriasDto = _mapper.Map<CategoriaDTO>(categoria);
+            return categoriasDto;
         }
 
         //Criar novo produto e o achar com seu id novo auto gerado
         [HttpPost]
-        public ActionResult Post(Categoria categoria)
+        public ActionResult Post(CategoriaDTO categoriaDto)
         {
-            if(categoria == null) return BadRequest();
-
+                var categoria = _mapper.Map<Categoria>(categoriaDto);
                 _uow.CategoriaRepository.Add(categoria);
                 _uow.Commit();
 
-                return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoria);
+                var produtoDTO = _mapper.Map<CategoriaDTO>(categoria); 
+
+                return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, produtoDTO);
             
         }
         //atualiza uma categoria
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, Categoria categoria)
+        public ActionResult Put(int id, CategoriaDTO categoriaDto)
         {
-            if (id != categoria.CategoriaId)
+            if (id != categoriaDto.CategoriaId)
             {
                 return BadRequest();
             }
+            var categoria = _mapper.Map<Categoria>(categoriaDto);
 
             _uow.CategoriaRepository.Update(categoria);
             _uow.Commit();
@@ -74,7 +84,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Categoria> Delete(int id)
+        public ActionResult<CategoriaDTO> Delete(int id)
         {
             var categoria = _uow.CategoriaRepository.GetById(p => p.CategoriaId == id);
             
@@ -82,9 +92,12 @@ namespace APICatalogo.Controllers
             {
                 return NotFound("Categoria não encontrada");
             }
+
             _uow.CategoriaRepository.Delete(categoria);
             _uow.Commit();
-            return Ok(categoria);
+
+            var categoriaDto = _mapper.Map<CategoriaDTO>(categoria);    
+            return categoriaDto;
         
         }
 
