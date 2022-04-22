@@ -1,5 +1,7 @@
 using APICatalogo.Context;
+using APICatalogo.DTOs.Mappings;
 using APICatalogo.Repository;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -23,6 +25,15 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlCon
 //Declarando o Unity of Work
 builder.Services.AddScoped<IUnitofWork, UnitofWork>();
 
+//Registrando autoMapper e o DTO
+
+var mappingConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 
