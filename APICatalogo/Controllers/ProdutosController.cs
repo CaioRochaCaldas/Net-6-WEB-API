@@ -23,14 +23,13 @@ namespace APICatalogo.Controllers
         //produtos por preço
         [HttpGet("menorpreco")]
         public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosPrecos()
-        {
-             var produtos = _uow.ProdutoRepository.GetProdutosPorPreco().ToList();
+        {   //O acesso é feito por  ProdutoRepository apos o filtro dentro deProdutoDTO retorna um <IEnumerable<ProdutoDTO>>
+            var produtos = _uow.ProdutoRepository.GetProdutosPorPreco().ToList();
              var produtosDto = _mapper.Map<List<ProdutoDTO>>(produtos);
              return produtosDto;
         }
 
-        //Coleção de lista de produto abaixo.
-        //ActionResult faz aceitar a coleção de produtos caso ocorra um erro.
+      
         [HttpGet]
         public ActionResult<IEnumerable<ProdutoDTO>> Get()
         {
@@ -40,7 +39,7 @@ namespace APICatalogo.Controllers
 
         }
 
-        //Uma Produto por id qualquer ou uma que acabou de ser criado
+      
         [HttpGet("{id}", Name="ObterProduto")]
         public ActionResult<ProdutoDTO> Get(int id)
         {
