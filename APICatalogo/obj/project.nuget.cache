@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "h7b9omCCeVEFqGLNCi6Zeqc1lEAINBzBFfA7iSITvy8+Kw8gSy1ZzTvB9D95DEE3VdY1Sv0LdCdBVGuXGM2eDg==",
+  "dgSpecHash": "2gTYdm5SNsBNJpkdGVtMBQHWD7FxlRGleoqVFw3V0RfmbWmOBOfxOamd459u9FB86Q24bJqHaJjpXH/Zkqqiuw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Administrador\\Documents\\Projetos\\C#\\2022\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Administrador\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
+    "C:\\Users\\Administrador\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
     "C:\\Users\\Administrador\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\Administrador\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Administrador\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.4\\microsoft.entityframeworkcore.6.0.4.nupkg.sha512",
     "C:\\Users\\Administrador\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.4\\microsoft.entityframeworkcore.abstractions.6.0.4.nupkg.sha512",
     "C:\\Users\\Administrador\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.4\\microsoft.entityframeworkcore.analyzers.6.0.4.nupkg.sha512",
