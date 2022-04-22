@@ -33,3 +33,5 @@ C:\Users\Administrador\Documents\Projetos\C#\2022\APICatalogo\APICatalogo\obj\De
 C:\Users\Administrador\Documents\Projetos\C#\2022\APICatalogo\APICatalogo\obj\Debug\net6.0\APICatalogo.pdb
 C:\Users\Administrador\Documents\Projetos\C#\2022\APICatalogo\APICatalogo\obj\Debug\net6.0\APICatalogo.genruntimeconfig.cache
 C:\Users\Administrador\Documents\Projetos\C#\2022\APICatalogo\APICatalogo\obj\Debug\net6.0\ref\APICatalogo.dll
+C:\Users\Administrador\Documents\Projetos\C#\2022\APICatalogo\APICatalogo\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Administrador\Documents\Projetos\C#\2022\APICatalogo\APICatalogo\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
