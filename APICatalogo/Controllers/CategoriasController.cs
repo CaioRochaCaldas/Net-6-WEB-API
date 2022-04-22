@@ -26,7 +26,7 @@ namespace APICatalogo.Controllers
             // return _uow.CategoriaRepository.Include(p=>p.Produtos).ToList();
             return _uow.CategoriaRepository.GetCategoriasProdutos().ToList();
         }
-
+        //
         //Todas as Categorias
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
