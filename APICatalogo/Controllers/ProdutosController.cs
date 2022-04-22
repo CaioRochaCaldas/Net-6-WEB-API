@@ -1,6 +1,8 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.DTOs;
 using APICatalogo.Models;
 using APICatalogo.Repository;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,72 +13,73 @@ namespace APICatalogo.Controllers
     public class ProdutosController : ControllerBase
     {
         private readonly IUnitofWork _uow;
+        private readonly IMapper _mapper;
 
-        public ProdutosController(IUnitofWork context)
+        public ProdutosController(IUnitofWork context, IMapper mapper)
         {
             _uow = context;
+            _mapper = mapper;
         }
         //produtos por preço
         [HttpGet("menorpreco")]
-        public ActionResult<IEnumerable<Produto>> GetProdutosPrecos()
+        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosPrecos()
         {
-            return _uow.ProdutoRepository.GetProdutosPorPreco().ToList();
+             var produtos = _uow.ProdutoRepository.GetProdutosPorPreco().ToList();
+             var produtosDto = _mapper.Map<List<ProdutoDTO>>(produtos);
+             return produtosDto;
         }
 
         //Coleção de lista de produto abaixo.
         //ActionResult faz aceitar a coleção de produtos caso ocorra um erro.
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> Get()
+        public ActionResult<IEnumerable<ProdutoDTO>> Get()
         {
             var produtos = _uow.ProdutoRepository.Get().ToList();
-            if(produtos is null)
-            {
-                return NotFound();
-            }
-            return produtos;
+            var produtosDto = _mapper.Map<List<ProdutoDTO>>(produtos);
+            return produtosDto;
 
         }
 
         //Uma Produto por id qualquer ou uma que acabou de ser criado
         [HttpGet("{id}", Name="ObterProduto")]
-        public ActionResult<Produto> Get(int id)
+        public ActionResult<ProdutoDTO> Get(int id)
         {
             var produto = _uow.ProdutoRepository.GetById(p=>p.ProdutoId ==id);
             if(produto == null)
             {
                 return NotFound("Produto não encontrado");
             }
+            var produtoDto = _mapper.Map<ProdutoDTO>(produto);
 
-            return produto;
+            return produtoDto;
         }
 
         //Add novo produto
         [HttpPost]
-        public ActionResult Post(Produto produto)
+        public ActionResult Post(ProdutoDTO produtoDto)
         {
-            _uow.ProdutoRepository.Add(produto);//Add produto na memoria
-            _uow.Commit(); // salva produtos e persiste eles
+            var produto = _mapper.Map<Produto>(produtoDto);
+            _uow.ProdutoRepository.Add(produto);
+            _uow.Commit(); 
 
-            //o produto que foi criado tem um id imcrementado e para achar
-            //esse produto recem criado devemos fazer a instancia para o
-            //codigo de produto criado 201 criação bem sucessida e podemos
-            //achar ele por a rota ObterProduto que é a rota de apenas
-            //produto recem criado
+            var produtoDTO = _mapper.Map<ProdutoDTO>(produto);
 
-            return new CreatedAtRouteResult("ObterProduto",new {id = produto.ProdutoId},produto);
+            return new CreatedAtRouteResult("ObterProduto",new {id = produto.ProdutoId},produtoDTO);
             
         }
 
         //Atualiza o produto tem como http os /produtos/{id}
         //OBS - o http put faz uma atualização completa em produto
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, Produto produto)
+        public ActionResult Put(int id, ProdutoDTO produtoDto)
         {
             //validação se o id passado é de algum produto
-            if(id != produto.ProdutoId)
+            if(id != produtoDto.ProdutoId)
             {
                 return BadRequest("Informe um produto que exista");
             }
+
+            var produto = _mapper.Map<Produto>(produtoDto);
 
             _uow.ProdutoRepository.Update(produto);
             _uow.Commit();
@@ -89,10 +92,9 @@ namespace APICatalogo.Controllers
         
         [HttpDelete("{id:int}")]
         
-        public ActionResult Delete(int id)
+        public ActionResult<ProdutoDTO> Delete(int id)
         {
-            var produto = _uow.ProdutoRepository.GetById(p=>p.ProdutoId == id);//procura direto no banco
-            //var produto = _uow.Produtos.Find(id);   //procura na memoria e depois para o banco
+            var produto = _uow.ProdutoRepository.GetById(p=>p.ProdutoId == id);
 
             if (produto is null)
             {
@@ -102,10 +104,8 @@ namespace APICatalogo.Controllers
             _uow.ProdutoRepository.Delete(produto);
             _uow.Commit();
 
-            //retorna um produto excluido bem sucedidamente status code 200 + o proprio produto
-            return Ok(produto);
-
-
+            var produtoDto = _mapper.Map<ProdutoDTO>(produto);
+            return produtoDto;
 
         }
 
