@@ -9,7 +9,7 @@ namespace APICatalogo.Repository
 
         // IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters);//faz paginação recebendo a regra de paginação
 
-        PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters);//agora o retorna da paginação vai ser page de list pois mudamos.
+        Task< PagedList<Produto>> GetProdutos(ProdutosParameters produtosParameters);//agora o retorna da paginação vai ser page de list pois mudamos.
         Task<IEnumerable<Produto>> GetProdutosPorPreco(); //lista de todos os produtos por preço
     }
 }
