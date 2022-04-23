@@ -1,10 +1,8 @@
-﻿using APICatalogo.Context;
-using APICatalogo.DTOs;
+﻿using APICatalogo.DTOs;
 using APICatalogo.Models;
 using APICatalogo.Pagination;
 using APICatalogo.Repository;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APICatalogo.Controllers
@@ -35,7 +33,19 @@ namespace APICatalogo.Controllers
         public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters)
         {
             //recebemos agora a pagina de produtos
-            var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters).ToList();
+            var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters);
+
+            var metadata = new { 
+                produtos.TotalCount,
+                produtos.PageSize,
+                produtos.CurrentPage,
+                produtos.TotalPages,
+                produtos.HasNext,
+                produtos.HasPrevious
+                };
+
+          //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata)); <- aqui jogamos para o header da chamada a paginação
+
             var produtosDto = _mapper.Map<List<ProdutoDTO>>(produtos);
             return produtosDto;
 

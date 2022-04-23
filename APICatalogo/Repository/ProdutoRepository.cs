@@ -13,13 +13,17 @@ namespace APICatalogo.Repository
         }
         
         //implementação metodo de paginação
-        public IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters)//recebe como parametro a regra de negocio de paginação novamente
+        public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)//recebe como parametro a regra de negocio de paginação novamente
         {
             // metodos de coisas que vamos lidar
-            return Get().OrderBy(on => on.Nome)
-                .Skip((produtosParameters.PageNumber - 1) * produtosParameters.PageSize) //bula toda a informação desnecessaria e vai direto ao fim da pagina
-                .Take(produtosParameters.PageSize)
-                .ToList();
+            /* return Get().OrderBy(on => on.Nome)
+                 .Skip((produtosParameters.PageNumber - 1) * produtosParameters.PageSize) //bula toda a informação desnecessaria e vai direto ao fim da pagina
+                 .Take(produtosParameters.PageSize)
+                 .ToList();*/
+
+            //agora o retorno é desse tipo de classe
+            return PagedList<Produto>.ToPagedList(Get().OrderBy(on => on.ProdutoId), produtosParameters.PageNumber, produtosParameters.PageSize);
+
         }
 
         public IEnumerable<Produto> GetProdutosPorPreco()
