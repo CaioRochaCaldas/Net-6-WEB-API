@@ -18,9 +18,9 @@ namespace APICatalogo.Repository
         } //implementação metodo de paginação
 
         //metodo especifico implementado aqui
-        public IEnumerable<Categoria> GetCategoriasProdutos()
+        public async Task<IEnumerable<Categoria>> GetCategoriasProdutos() //Agora é async
         {
-            return Get().Include(x=>x.Produtos);
+            return await Get().Include(x=>x.Produtos).ToListAsync();
         }
     }
 }

@@ -7,6 +7,6 @@
         ICategoriaRepository CategoriaRepository { get; }
 
         //metodo para salvar auterações
-        void Commit();
+        Task Commit();
     }
 }

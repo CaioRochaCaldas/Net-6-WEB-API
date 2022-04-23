@@ -19,9 +19,9 @@ namespace APICatalogo.Repository
         {
             return _context.Set<T>().AsNoTracking(); //lista de entidades e otimizando a resposta da api com AsNoTracking
         }
-        public T GetById(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetById(Expression<Func<T, bool>> predicate) //transformar em async
         {
-            return _context.Set<T>().SingleOrDefault(predicate);
+            return await _context.Set<T>().SingleOrDefaultAsync(predicate);
         }
 
         public void Add(T entity)
